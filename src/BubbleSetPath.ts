@@ -63,10 +63,31 @@ function toEdgeKey(line: ILine) {
   return `${round2(line.x1)}x${round2(line.y1)}x${round2(line.x2)}x${round2(line.y2)}`;
 }
 
-function linesEquals(a: ILine[], b: ILine[]) {
-  return a.length === b.length && a.every((ai, i) => toEdgeKey(ai) === toEdgeKey(b[i]));
-}
+// function linesEquals(a: ILine[], b: ILine[]) {
+//   return a.length === b.length && a.every((ai, i) => toEdgeKey(ai) === toEdgeKey(b[i]));
+// }
 
+function linesEquals(a: ILine[], b: ILine[]) {
+  // Input validation: Ensure that 'a' and 'b' are arrays.
+  if (!Array.isArray(a) || !Array.isArray(b)) {
+    console.error("Both 'a' and 'b' must be arrays of ILine.");
+    return false;
+  }
+
+  // Input validation: Ensure that both arrays have the same length.
+  if (a.length !== b.length) {
+    console.error("Arrays 'a' and 'b' must have the same length.");
+    return false;
+  }
+
+  try {
+    // Compare each element of 'a' and 'b' using the 'toEdgeKey' function.
+    return a.every((ai, i) => toEdgeKey(ai) === toEdgeKey(b[i]));
+  } catch (error) {
+    console.error("An error occurred while comparing lines: " + error.message);
+    return false;
+  }
+}
 function createShape(isCircle: boolean, bb: cy.BoundingBox12 & cy.BoundingBoxWH) {
   return isCircle
     ? new Circle(bb.x1 + bb.w / 2, bb.y1 + bb.h / 2, Math.max(bb.w, bb.h) / 2)
